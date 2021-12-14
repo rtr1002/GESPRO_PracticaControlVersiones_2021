@@ -33,6 +33,7 @@ android {
 
     defaultConfig {
         applicationId "com.davidmiguel.gobees"
+
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 11
