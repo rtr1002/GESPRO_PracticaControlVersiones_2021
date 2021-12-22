@@ -25,6 +25,7 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.davidmiguel.gobees"
+
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 11
