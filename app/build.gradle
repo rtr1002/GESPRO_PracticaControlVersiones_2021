@@ -1,3 +1,136 @@
+Rafa 13ño
+#5355
+Remember: Fear is the Mind Killer
+GESPRO
+
+Rafa 13ño
+ ha cambiado el nombre del canal: 
+GESPRO
+ — hoy a las 22:07
+Rafa 13ño
+ ha añadido a 
+estela11
+ al grupo.
+ — hoy a las 22:08
+Rafa 13ño
+ ha añadido a 
+Maite
+ al grupo.
+ — hoy a las 22:08
+Rafa 13ño
+ ha añadido a 
+pabletemarcos
+ al grupo.
+ — hoy a las 22:10
+Rafa 13ño
+ ha iniciado una llamada.
+ — hoy a las 22:10
+Maite — hoy a las 22:39
+/*
+ * GoBees
+ * Copyright (c) 2016 - 2017 David Miguel Lozano
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+ */
+
+apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
+apply plugin: 'realm-android'
+apply plugin: 'io.fabric'
+
+// Get signing config
+def keystorePropertiesFile = rootProject.file("secrets/keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
+
+    defaultConfig {
+        applicationId "com.davidmiguel.gobees"
+
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 11
+        versionName "v1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                crashlyticsKey: keystoreProperties['CrashlyticsKey']
+        ]
+        buildConfigField 'String', 'COMMIT_HASH', "\"${getCommitHash()}\""
+        buildConfigField 'String', 'BUILD_DATE', "\"${getBuildDate()}\""
+        buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', keystoreProperties['OpenWeatherMapApiKey']
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias keystoreProperties['keyAliasDebug']
+            keyPassword keystoreProperties['keyPasswordDebug']
+            storeFile file(keystoreProperties['storeFileDebug'])
+            storePassword keystoreProperties['storePasswordDebug']
+        }
+        relase {
+            storeFile file(keystoreProperties['storeFileRelease'])
+            storePassword keystoreProperties['storePasswordRelease']
+            keyAlias keystoreProperties['keyAliasRelease']
+            keyPassword keystoreProperties['keyPasswordRelease']
+        }
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+            aaptOptions {
+                cruncherEnabled = false // No img optimization in debug
+            }
+        }
+        release {
+            shrinkResources true // Remove unused resources
+            minifyEnabled true // Enable proguard (shrinks, optimizes and obfuscates code)
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-guava.pro',
+                    'proguard-mpandroidchart.pro',
+                    'proguard-rounded-image-view.pro',
+                    'proguard-realm.pro',
+                    'proguard-rules.pro'
+            testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
+            signingConfig signingConfigs.relase
+        }
+    }
+
+    productFlavors {
+        // Mock: mock data layer
+        mock {
+            applicationIdSuffix = ".mock"
+            resValue('string', 'app_name', getAppName() + '-mock')
+            ext.enableCrashlytics = false
+        }
+        // Dev: dev environment
+        dev {
+            applicationIdSuffix = ".dev"
+            resValue('string', 'app_name', getAppName() + '-dev')
+        }
+... (178 líneas restantes)
+Contraer
+build.gradle
+12 KB
+﻿
 /*
  * GoBees
  * Copyright (c) 2016 - 2017 David Miguel Lozano
@@ -275,3 +408,5 @@ private static String getBuildDate() {
 private static String getAppName() {
     return "GoBees"
 }
+build.gradle
+12 KB
